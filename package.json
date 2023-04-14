@@ -11,7 +11,8 @@
     "install:client": "npm install --prefix client",
     "install": "npm run install:server && npm run install:client",
     "test": "npm runtest --prefix server && npm run test --prefix client",
-    "deploy": "npm run build --prefix client && npm run start --prefix server"
+    "deploy": "npm run build --prefix client && npm run start --prefix server",
+    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server"
   },
   "author": "",
   "license": "ISC"
