@@ -13,7 +13,7 @@ describe('Launches API', () => {
 
     describe('Test GET /launches', () => {
         test('It should respond with 200 success', async () => {
-            const response = await request(app).get('/launches').expect(200).expect('Content-Type', /json/);
+            const response = await request(app).get('/v1/launches').expect(200).expect('Content-Type', /json/);
         });
     });
     
@@ -27,7 +27,7 @@ describe('Launches API', () => {
             };
     
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(completeLaunchData)
                 .expect(201).expect('Content-Type', /json/);
     
@@ -52,7 +52,7 @@ describe('Launches API', () => {
             };
     
             const response = await request(app)
-            .post('/launches')
+            .post('/v1/launches')
             .send(invalidDateLaunch)
             .expect(400).expect('Content-Type', /json/);
     
@@ -64,7 +64,7 @@ describe('Launches API', () => {
             const missingFieldsLaunch = {};
     
             const response = await request(app)
-            .post('/launches')
+            .post('/v1/launches')
             .send(missingFieldsLaunch)
             .expect(400).expect('Content-Type', /json/);
     
@@ -74,11 +74,11 @@ describe('Launches API', () => {
     
     describe('Test DELETE /launches', () => {
         test('It should respond with 200 success', async () => {
-            const response = await request(app).delete('/launches/100').expect(200);
+            const response = await request(app).delete('/v1/launches/100').expect(200);
         }); 
     
         test('It should respond with an error if and 404 status code if launch does not exist', async () => {
-            const response = await request(app).delete('/launches/100000').expect(404);
+            const response = await request(app).delete('/v1/launches/100000').expect(404);
     
             
             expect(response.body).toStrictEqual({error: 'Launch not found'});
