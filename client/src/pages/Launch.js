@@ -1,6 +1,4 @@
 import { useMemo } from "react";
-import { Appear, Button, Loading, Paragraph } from "arwes";
-import Clickable from "../components/Clickable";
 
 const Launch = props => {
   const selectorBody = useMemo(() => {
@@ -11,9 +9,9 @@ const Launch = props => {
 
   const today = new Date().toISOString().split("T")[0];
 
-  return <Appear id="launch" animate show={props.entered}>
-    <Paragraph>Schedule a mission launch for interstellar travel to one of the Kepler Exoplanets.</Paragraph>
-    <Paragraph>Only confirmed planets matching the following criteria are available for the earliest scheduled missions:</Paragraph>
+  return <div id="launch">
+    <p>Schedule a mission launch for interstellar travel to one of the Kepler Exoplanets.</p>
+    <p>Only confirmed planets matching the following criteria are available for the earliest scheduled missions:</p>
     <ul>
       <li>Planetary radius &lt; 1.6 times Earth's radius</li>
       <li>Effective stellar flux &gt; 0.36 times Earth's value and &lt; 1.11 times Earth's value</li>
@@ -30,20 +28,18 @@ const Launch = props => {
       <select id="planets-selector" name="planets-selector">
         {selectorBody}
       </select>
-      <Clickable>
-        <Button animate 
-          show={props.entered} 
+      <div>
+        <button 
           type="submit" 
-          layer="success" 
           disabled={props.isPendingLaunch}>
           Launch Mission ✔
-        </Button>
-      </Clickable>
+        </button>
+      </div>
       {props.isPendingLaunch &&
-        <Loading animate small />
+        <p>Loading ...</p>
       }
     </form>
-  </Appear>
+  </div>
 };
 
 export default Launch;

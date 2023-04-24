@@ -1,27 +1,8 @@
 import { useMemo } from "react";
-import { 
-  withStyles,
-  Appear,
-  Link,
-  Paragraph,
-  Table,
-  Words,
-} from "arwes";
-
-import Clickable from "../components/Clickable";
-
-const styles = () => ({
-  link: {
-    color: "red",
-    textDecoration: "none",
-  },
-});
 
 const Upcoming = props => {
   const { 
-    entered,
     launches,
-    classes,
     abortLaunch,
   } = props;
 
@@ -30,11 +11,11 @@ const Upcoming = props => {
       .map((launch) => {
         return <tr key={String(launch.flightNumber)}>
           <td>
-            <Clickable style={{color:"red"}}>
-              <Link className={classes.link} onClick={() => abortLaunch(launch.flightNumber)}>
+            <div style={{color:"red"}}>
+              <button onClick={() => abortLaunch(launch.flightNumber)}>
                 ✖
-              </Link>
-            </Clickable>
+              </button>
+            </div>
           </td>
           <td>{launch.flightNumber}</td>
           <td>{new Date(launch.launchDate).toDateString()}</td>
@@ -43,12 +24,12 @@ const Upcoming = props => {
           <td>{launch.target}</td>
         </tr>;
       });
-  }, [launches, abortLaunch, classes.link]);
+  }, [launches, abortLaunch]);
 
-  return <Appear id="upcoming" animate show={entered}>
-    <Paragraph>Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.</Paragraph>
-    <Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
-    <Table animate show={entered}>
+  return <div id="upcoming" >
+    <p>Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.</p>
+    <p>Warning! Clicking on the ✖ aborts the mission.</p>
+    <div >
       <table style={{tableLayout: "fixed"}}>
         <thead>
           <tr>
@@ -64,8 +45,8 @@ const Upcoming = props => {
           {tableBody}
         </tbody>
       </table>
-    </Table>
-  </Appear>;
+    </div>
+  </div>;
 }
 
-export default withStyles(styles)(Upcoming);
+export default Upcoming;
