@@ -2,16 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan')
 const path = require('path');
-const app = express(); 
 const api = require('./routes/api');
 const passport = require('passport');
+const cookieSession = require('cookie-session');
 const { OAuth2Strategy } = require('passport-google-oauth');
 
 require('dotenv').config();
 
+const app = express(); 
+
 const AUTH_CONFIG = {
     CLIENT_ID: process.env.CLIENT_ID,
     CLIENT_SECRET: process.env.CLIENT_SECRET,
+    COOKIE_KEY_1: process.env.COOKIE_KEY_1,
+    COOKIE_KEY_2: process.env.COOKIE_KEY_2,
 }
 
 const AUTH_OPTIONS = {
@@ -26,14 +30,31 @@ const verifyCallback = (accessToken, refreshToken, profile, done) => {
 }
  
 passport.use(new OAuth2Strategy(AUTH_OPTIONS, verifyCallback));
+ 
+// Save the session to the cookie
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
 
-// app.use(helmet());
+// Read the session from the cookie
+passport.deserializeUser((obj, done) => {
+    done(null, id);
+});
 
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+// app.use(helmet());
+
+app.use(cookieSession({
+    name: 'session',
+    keys: [ AUTH_CONFIG.COOKIE_KEY_1, AUTH_CONFIG.COOKIE_KEY_2 ],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(morgan('combined'));
 
@@ -46,8 +67,8 @@ app.get('/*', (req, res) => {
 });
 
 const checkLoggedIn = (req, res, next) => {
-    const isLoggedIn = true;
-    if (isLoggedIn) {
+    const isLoggedIn = req.isAuthenticated() && req.user; 
+    if (!isLoggedIn) {
         return res.status(401).json({
             error: 'You are not logged in'
         });
@@ -67,7 +88,7 @@ app.get('/auth/google', passport.authenticate('google', {
 app.get('/auth/google/callback', passport.authenticate('google', {
     failureRedirect: '/failure',
     successRedirect: '/',
-    session: false,
+    session: true,
 }), (req, res) => {
     console.log('Google called us back!')
 });
@@ -77,7 +98,8 @@ app.get('/failure', (req, res) => {
 });
 
 app.get('/auth/logout', (req, res) => {
-
+    req.logout(); // removes req.user and clears session
+    return res.redirect('/');
 });
 
 module.exports = app;

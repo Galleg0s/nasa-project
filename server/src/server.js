@@ -1,10 +1,10 @@
 const http = require('http');
-require('dotenv').config();
 const app = require('./app');
 const { loadPlanetsData } = require('./models/planets.model');
 const { mongoConnect } = require('./services/mongo');
 const { loadLaunchData } = require('./models/launches.model')
 
+require('dotenv').config();
 const PORT = process.env.PORT || 8000;
  
 // This set up allows us to use different types of connections, such as Web Sockets
