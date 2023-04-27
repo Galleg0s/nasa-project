@@ -1,7 +1,7 @@
 name: NASA Project CI
-on: 
+on:
   push:
-    branches: [ master ]
+    branches: [ master, develop ]
   pull_request:
     branches: [ master ]
 jobs:
@@ -15,4 +15,3 @@ jobs:
           node-version: '16'
       - run: npm install
       - run: npm run build --prefix client
-      
