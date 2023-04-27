@@ -20,7 +20,10 @@ const AppLayout = props => {
 
   const [frameVisible, setFrameVisible] = useState(true);
   const animateFrame = () => {
-    setFrameVisible(false);
+    if (frameVisible) {
+      setFrameVisible(false);
+    }
+ 
     setTimeout(() => {
       setFrameVisible(true);
     }, 600);
